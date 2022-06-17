@@ -15,7 +15,7 @@ const Addproduct = () => {
         <li>
           <TextArea rows={10} placeholder="maxLength is 6" maxLength={6} />
         </li>
-        <div>Category</div>
+        <label>Category</label>
         <li>
           <Select
             showSearch
@@ -42,7 +42,7 @@ const Addproduct = () => {
           <Textinput type="text" label="Add Image Link" />
         </li>
         <li>
-          <p>Add Image</p>
+          <label>Add Image</label>
           <Imageupload />
         </li>
         <button className="btnP">Add Product</button>

@@ -178,6 +178,17 @@ h3 {
   padding: 10px;
 }
 
+.Cart-container li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.Cart-container ul li {
+  margin-left: 60px;
+}
+
 .goals {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
