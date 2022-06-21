@@ -16,10 +16,6 @@ a {
   color: #000;
 }
 
-p {
-  line-height: 1.7;
-}
-
 ul {
   list-style: none;
 }
@@ -148,27 +144,16 @@ h3 {
   color: #828282;
 }
 
-.product-container {
-  padding: 120px;
-}
-
-.product-container ul {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.product-container ul li {
-  margin-left: 20px;
-}
-
 .product-from-container {
   width: 100%;
-  max-width: 600px;
   margin: 0 auto;
+  max-width: 800px;
+
   padding: 0 20px;
   padding-top: 120px;
   padding-bottom: 120px;
+
+  border-radius: 2rem;
 }
 
 .product-from-container li {
@@ -178,7 +163,7 @@ h3 {
   padding: 10px;
 }
 
-.Cart-container li {
+.Cart-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -238,6 +223,12 @@ h3 {
   margin: 0 0 5px 3px;
 }
 
+.product1-list {
+  background-color: #dfe6e9;
+  padding: 3em;
+  border-radius: 2rem;
+}
+
 .btn {
   padding: 0px 20px;
   border-color: #20245e;
@@ -256,18 +247,13 @@ h3 {
 }
 .btnP {
   padding: 15px 15px;
-  border-color: #4e9ce6;
+  border-color: #ebd06e;
   border-radius: 5px;
-  background: #4e9ce6;
-  color: #fff;
+  background: #858585;
+  color: #ffffff;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 1000;
   cursor: pointer;
-  text-align: center;
-  appearance: button;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .btn svg {
