@@ -1,17 +1,45 @@
 import React from "react";
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 
 import { Button, Input, Modal } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //import Draggable from "react-draggable";
 import OpenCart from "../../Common/OpenCart";
+import Axios from "axios";
 
 const Cart = () => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState([]);
+  const [Cart, setCart] = useState([]);
+
+  const getCart = () => {
+    let userInfo = localStorage.getItem("user");
+
+    userInfo = JSON.parse(userInfo);
+    let token = userInfo["token"];
+    Axios.get("/api/product/getcart", {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((response) => {
+      if (response.data) {
+        setCart([...Cart, ...response.data]);
+      } else {
+        alert("Failed to fectch product datas");
+      }
+    });
+  };
+
+  useEffect(() => {
+    getCart(Cart);
+    // console.log("Products");
+  }, []);
 
   return (
     <div className="Cart-container">
-      <OpenCart handleOnClickCart={() => setVisible(true)} />
+      <OpenCart
+        handleOnClickCart={() => {
+          getCart();
+          setVisible(true);
+        }}
+      />
       <Modal
         title={null}
         visible={visible}
@@ -23,8 +51,13 @@ const Cart = () => {
         }}
       >
         <div className="title-p">Cart</div>
-        <p>Product 1</p>
-        <p>Product 2</p>
+        {Cart.map((values) => {
+          return (
+            <>
+              <p>{values.productname}</p>
+            </>
+          );
+        })}
         <label>Apply Discount Code</label>
         <ul>
           <li>

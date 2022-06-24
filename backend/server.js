@@ -16,6 +16,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/api/goals", require("./routes/goalRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/product", require("./routes/productRoutes"));
+//make public
+app.use("/uploads", express.static("uploads"));
 
 // Serve frontend
 if (process.env.NODE_ENV === "production") {

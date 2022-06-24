@@ -5,7 +5,15 @@ const API_URL = "/api/product/";
 // Add Product to database
 
 const addproduct = async (productData) => {
-  const response = await axios.post(API_URL + "addproduct", productData);
+  let userInfo = localStorage.getItem("user");
+
+  //token
+  userInfo = JSON.parse(userInfo);
+  // console.log(userInfo);
+  let token = userInfo["token"];
+  const response = await axios.post(API_URL + "addproduct", productData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   return response.data;
 };
@@ -30,7 +38,7 @@ const addproduct = async (productData) => {
 
 const productService = {
   addproduct,
-  getProducts,
+  // getProducts,
 };
 
 export default productService;

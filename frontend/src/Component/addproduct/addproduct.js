@@ -1,9 +1,9 @@
 import Textinput from "../../Common/TextInput/Textinput";
-import Imageupload from "../../Common/Imageupload";
+import FileUpload from "../../Common/FileUpload";
 import { Input, Select } from "antd";
 import { useState } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addproduct } from "../../features/product/productSlice";
 
 const Addproduct = () => {
@@ -11,10 +11,19 @@ const Addproduct = () => {
     Productname: "",
     Productdescription: "",
     Catagory: "",
-    Price: "",
-    Stock: "",
+    Price: 0,
+    Stock: 0,
   });
-
+  const [images, setImages] = useState([]);
+  const Category = [
+    { key: 1, value: "Category1" },
+    { key: 2, value: "Category2" },
+    { key: 3, value: "Category3" },
+    { key: 4, value: "Category4" },
+  ];
+  const updateImages = (newImages) => {
+    setImages(newImages);
+  };
   const dispatch = useDispatch();
 
   const handleonchange = (e) => {
@@ -23,11 +32,10 @@ const Addproduct = () => {
 
   const { TextArea } = Input;
   const { Option } = Select;
-//-------------------------------------
+  //-------------------------------------
   const handlesubmitAdd = async () => {
     //console.log(inputvalue.Productname);
     //  console.log(inputvalue.Productdescription);
-
 
     const productData = {
       productname: inputvalue.Productname,
@@ -35,6 +43,7 @@ const Addproduct = () => {
       catagory: inputvalue.Catagory,
       price: inputvalue.Price,
       stock: inputvalue.Stock,
+      images: images,
     };
     dispatch(addproduct(productData));
   };
@@ -83,10 +92,17 @@ const Addproduct = () => {
             name={"Catagory"}
             placeholder="Select Category"
           >
-            <Option value="1">Category1</Option>
-            <Option value="2">Category2</Option>
-            <Option value="3">Category3</Option>
+            <Option value="Category1">Category1</Option>
+            <Option value="Category2">Category2</Option>
+            <Option value="Category3">Category3</Option>
           </Select>
+          {/* 
+          <select onChange={handleonchange} value={inputvalue.Catagory}>
+            {Category.map((e) => (
+              <option key={e.key} value={e.key}></option>
+            ))}
+          </select> */}
+
           <Textinput
             type="number"
             label="Price"
@@ -107,7 +123,7 @@ const Addproduct = () => {
         </li>
         <li>
           <label>Add Image</label>
-          <Imageupload />
+          <FileUpload refreshFunction={updateImages} />
         </li>
         <button onClick={handlesubmitAdd} className="btnP">
           Add Product
