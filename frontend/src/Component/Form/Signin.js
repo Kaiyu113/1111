@@ -63,7 +63,7 @@ const Signin = ({
 
     if (isSuccess || user) {
       toast.success("Successful Login");
-      navigate("/");
+      navigate("/home");
     }
 
     dispatch(reset());

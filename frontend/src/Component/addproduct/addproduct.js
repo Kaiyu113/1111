@@ -1,30 +1,26 @@
 import Textinput from "../../Common/TextInput/Textinput";
 import FileUpload from "../../Common/FileUpload";
 import { Input, Select } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { useDispatch } from "react-redux";
-import { addproduct } from "../../features/product/productSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addproduct, reset } from "../../features/product/productSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Addproduct = () => {
   const [inputvalue, setinputvalue] = useState({
-    Productname: "",
+    productName: "",
     Productdescription: "",
     Catagory: "",
     Price: 0,
     Stock: 0,
   });
   const [images, setImages] = useState([]);
-  const Category = [
-    { key: 1, value: "Category1" },
-    { key: 2, value: "Category2" },
-    { key: 3, value: "Category3" },
-    { key: 4, value: "Category4" },
-  ];
+
   const updateImages = (newImages) => {
     setImages(newImages);
   };
-  const dispatch = useDispatch();
 
   const handleonchange = (e) => {
     setinputvalue({ ...inputvalue, [e.target.name]: e.target.value });
@@ -33,12 +29,29 @@ const Addproduct = () => {
   const { TextArea } = Input;
   const { Option } = Select;
   //-------------------------------------
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isError, isSuccess, message } = useSelector(
+    (state) => state.product
+  );
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+
+    if (isSuccess) {
+      toast.success("Successful Login");
+      navigate("/home");
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
   const handlesubmitAdd = async () => {
-    //console.log(inputvalue.Productname);
+    //console.log(inputvalue.productName);
     //  console.log(inputvalue.Productdescription);
 
     const productData = {
-      productname: inputvalue.Productname,
+      productName: inputvalue.productName,
       productdescription: inputvalue.Productdescription,
       catagory: inputvalue.Catagory,
       price: inputvalue.Price,
@@ -55,10 +68,10 @@ const Addproduct = () => {
       <ul>
         <Textinput
           type={"text"}
-          inputname={"Productname"}
+          inputname={"productName"}
           label={"Product Name"}
           placeholder={""}
-          value={inputvalue.Productname}
+          value={inputvalue.productName}
           onChange={handleonchange}
         />
         <div>Product Description</div>

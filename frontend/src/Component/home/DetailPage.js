@@ -1,49 +1,61 @@
-import React, { useEffect, useState } from "react";
-
+import { useEffect, useState } from "react";
 import Axios from "axios";
-
+import { useParams } from "react-router-dom";
 import { Row, Col } from "antd";
 import ProductImage from "../../Common/DetailPageC/ProductImage";
 import ProductInfo from "../../Common/DetailPageC/ProductInfo";
-//import { addToCart } from "../../../_actions/user_actions";
+const DetailPage = () => {
+  const [Products, setProducts] = useState([]);
+  const [detailPage, setDetailPage] = useState([]);
+  const params = useParams();
 
-import { useDispatch } from "react-redux";
-
-function DetailProductPage(props) {
-  //const dispatch = useDispatch();
-  const productId = props.match.params.productId;
-  const [Product, setProduct] = useState([]);
-
-  useEffect(() => {
-    Axios.get(`/api/product/products_by_id?id=${productId}&type=single`).then(
-      (response) => {
-        setProduct(response.data[0]);
+  const getProducts = () => {
+    Axios.get("/api/product/getproducts").then((response) => {
+      if (response.data) {
+        setProducts([...Products, ...response.data]);
+      } else {
+        alert("Failed to fectch product datas");
       }
-    );
-  }, []);
-
-  const addToCartHandler = (productId) => {
-    //  dispatch(addToCart(productId));
+    });
   };
 
+  useEffect(() => {
+    getProducts(Products);
+    if (params.productId) {
+      Products.forEach((product) => {
+        if (product._id === params.productId) {
+          setDetailPage(product);
+        }
+      });
+    }
+  }, [params.productId, Products]);
+
+  //console.log(detailPage);
+  // console.log(params.productId);
+
   return (
-    <div className="postPage" style={{ width: "100%", padding: "3rem 4rem" }}>
+    <div
+      className="product1-container"
+      style={{ width: "100%", padding: "3rem 4rem" }}
+    >
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <h1>{Product.title}</h1>
+        <h1>{detailPage._id}</h1>
       </div>
 
       <br />
 
       <Row gutter={[16, 16]}>
         <Col lg={12} xs={24}>
-          <ProductImage detail={Product} />
+          <ProductImage detail={detailPage} />
         </Col>
-        <Col lg={12} xs={24}>
-          <ProductInfo addToCart={addToCartHandler} detail={Product} />
-        </Col>
+        {
+          // <Col lg={12} xs={24}>
+          //   <ProductInfo detail={detailPage} />
+          // </Col>
+        }
       </Row>
     </div>
   );
-}
+};
 
-export default DetailProductPage;
+export default DetailPage;

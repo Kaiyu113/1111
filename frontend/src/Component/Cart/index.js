@@ -1,21 +1,34 @@
 import React from "react";
 import "antd/dist/antd.min.css";
-
-import { Button, Input, Modal } from "antd";
+import "./cart.css";
+import { Button, Modal } from "antd";
 import { useState, useEffect } from "react";
-//import Draggable from "react-draggable";
 import OpenCart from "../../Common/OpenCart";
 import Axios from "axios";
 
 const Cart = () => {
-  const [visible, setVisible] = useState([]);
+  const [visible, setVisible] = useState(false);
   const [Cart, setCart] = useState([]);
+
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const getTotal = () => {
+      const total = Cart.reduce((prev, item) => {
+        return prev + item.price * item.quantity;
+      }, 0);
+
+      setTotal(total);
+    };
+
+    getTotal();
+  }, [Cart]);
 
   const getCart = () => {
     let userInfo = localStorage.getItem("user");
-
     userInfo = JSON.parse(userInfo);
     let token = userInfo["token"];
+
     Axios.get("/api/product/getcart", {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
@@ -29,14 +42,46 @@ const Cart = () => {
 
   useEffect(() => {
     getCart(Cart);
-    // console.log("Products");
   }, []);
 
+  const increment = (id) => {
+    Cart.forEach((item) => {
+      if (item._id === id) {
+        item.quantity += 1;
+      }
+    });
+
+    setCart([...Cart]);
+    getCart(Cart);
+  };
+
+  const decrement = (id) => {
+    Cart.forEach((item) => {
+      if (item._id === id) {
+        item.quantity === 1 ? (item.quantity = 1) : (item.quantity -= 1);
+      }
+    });
+
+    setCart([...Cart]);
+    getCart(Cart);
+  };
+  const removeProduct = (id) => {
+    Cart.forEach((item, index) => {
+      if (item._id === id) {
+        Cart.splice(index, 1);
+      }
+    });
+
+    setCart([...Cart]);
+    getCart(Cart);
+  };
+
+  console.log(Cart);
   return (
     <div className="Cart-container">
       <OpenCart
         handleOnClickCart={() => {
-          getCart();
+          //getCart();
           setVisible(true);
         }}
       />
@@ -51,10 +96,35 @@ const Cart = () => {
         }}
       >
         <div className="title-p">Cart</div>
-        {Cart.map((values) => {
+        {Cart.map((product) => {
           return (
             <>
-              <p>{values.productname}</p>
+              <div className="detail cart" key={product._id}>
+                <img
+                  className="images"
+                  src={`http://localhost:5000/${product.images}`}
+                  alt=""
+                />
+
+                <div className="box-detail">
+                  <h2>{product.productName}</h2>
+
+                  <h3>$ {product.price * product.quantity}</h3>
+
+                  <div className="amount">
+                    <button onClick={() => decrement(product._id)}> - </button>
+                    <span>{product.quantity}</span>
+                    <button onClick={() => increment(product._id)}> + </button>
+                  </div>
+
+                  <div
+                    className="delete"
+                    onClick={() => removeProduct(product._id)}
+                  >
+                    X
+                  </div>
+                </div>
+              </div>
             </>
           );
         })}
@@ -67,20 +137,18 @@ const Cart = () => {
           <hr />
 
           <li>
-            <p>Subtotal</p>
-            <p>$499.00</p>
+            <div className="total">
+              <h3>Total: $ {total}</h3>
+            </div>
           </li>
           <li>
             <p>Tax</p>
-            <p>499</p>
           </li>
           <li>
             <p>Discount</p>
-            <p>499</p>
           </li>
           <li>
             <div>Estimated total</div>
-            <div>499</div>
           </li>
         </ul>
         <button className="btnP">Continue to Checkout</button>

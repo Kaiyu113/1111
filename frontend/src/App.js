@@ -7,7 +7,7 @@ import Footer from "./Common/footer";
 import Home from "./Component/home";
 import Signin from "./Component/Form/Signin";
 import Addproduct from "./Component/addproduct/addproduct";
-import DetailProductPage from "./Component/home/DetailPage";
+import DetailPage from "./Component/home/DetailPage";
 
 function App() {
   return (
@@ -20,10 +20,7 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Signin" element={<Signin />} />
             <Route path="/Addproduct" element={<Addproduct />} />
-            <Route
-              path="/product/:productId"
-              component={<DetailProductPage />}
-            />
+            <Route path="/product/:productId" element={<DetailPage />} />
           </Routes>
 
           <Footer />

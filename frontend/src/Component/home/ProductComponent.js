@@ -21,16 +21,19 @@ const ProductComponent = () => {
       }
     });
   };
-  console.log(Products);
-  const addToCart = (productid, productname) => {
+  //console.log(Products);
+  const addToCart = (productid, productName, price, images) => {
     let userInfo = localStorage.getItem("user");
 
     //token
     userInfo = JSON.parse(userInfo);
     let productData = {
       productid: productid,
-      productname: productname,
+      productName: productName,
       userid: userInfo["_id"],
+      quantiry: 1,
+      price: price,
+      images: images,
     };
 
     // console.log(userInfo);
@@ -46,26 +49,33 @@ const ProductComponent = () => {
   };
 
   return (
-    <div class="product-container" key={"values._id"}>
+    <div class="product-container">
       {Products.map((values) => {
         return (
           <>
-            <div className="card">
+            <div className="card" key={values._id}>
               <div className="content">
                 <Link to={`/product/${values._id}`}>
-                  <div className="title">{values.category}</div>
+                  <div className="title">{values.productName}</div>
                   <div className="image">
                     <img
                       src={`http://localhost:5000/${values.images}`}
-                      alt={values.productname}
+                      alt={values.productName}
                     />
                   </div>
                 </Link>
-                <div className="text">{values.productname}</div>
-                <div className="text">$ {values.price}</div>
+
+                <div className="title">$ {values.price}</div>
 
                 <button
-                  onClick={() => addToCart(values._id, values.productname)}
+                  onClick={() =>
+                    addToCart(
+                      values._id,
+                      values.productName,
+                      values.price,
+                      values.images
+                    )
+                  }
                   className="buy-button details"
                 >
                   {!isAdded ? "ADD TO CART" : "✔ ADDED"}

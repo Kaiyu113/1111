@@ -7,6 +7,7 @@ const {
   getProducts,
   addToCart,
   getCart,
+  deleteCart,
 } = require("../controllers/productController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -49,5 +50,6 @@ router.post("/uploadImage", (req, res) => {
   });
 });
 
+router.route("/:id'").delete(protect, deleteCart);
 //===========================
 module.exports = router;

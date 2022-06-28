@@ -18,27 +18,22 @@ const addproduct = async (productData) => {
   return response.data;
 };
 
-//Get Product Data
-// const getProducts = (variables) => {
-//   axios.post("/api/product", variables).then((response) => {
-//     if (response.data.success) {
-//       if (variables.loadMore) {
-//         setItem([...Products, ...response.data.products]);
-//       } else {
-//         setItem(response.data.products);
-//       }
-//       setPostSize(response.data.postSize);
-//     } else {
-//       alert("Failed to fectch product datas");
-//     }
-//   });
-// };
+//----------------
+const deleteCart = async (cartId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
-//------------------
+  const response = await axios.delete(API_URL + cartId, config);
+
+  return response.data;
+};
 
 const productService = {
   addproduct,
-  // getProducts,
+  deleteCart,
 };
 
 export default productService;
